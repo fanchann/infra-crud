@@ -1,0 +1,209 @@
+openapi: "3.0.2"
+info:
+  title: Book Collection
+  version: "1.0"
+servers:
+  - url: localhost:8080/v1
+paths:
+  /books:
+    get:
+      responses:
+        "200":
+          description: get all books
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  "status":
+                    type: integer
+                    example: 200
+                  "message":
+                    type: string
+                    example: success get all books
+                  "data":
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title::
+                          type: string
+                          example: one piece
+  /book/:id:
+    get:
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        "200":
+          description: get data by id
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  "status":
+                    type: integer
+                    example: 200
+                  "message":
+                    type: string
+                    example: success get data by id
+                  "data":
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: one piece
+        "404":
+          description: not found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      security:
+        - Token:
+      parameters:
+        - name: id
+          in: path
+          required: true
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: one piece
+      responses:
+        "200":
+          description: edit book by id
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  "status":
+                    type: integer
+                    example: 200
+                  "message":
+                    type: string
+                    example: success edit book by id
+                  "data":
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: one piece edited
+        "400":
+          description: not found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+    delete:
+      security:
+        - Token:
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success delete book
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  "status":
+                    type: integer
+                    example: 200
+                  "message":
+                    type: string
+                    example: success delete book
+        "404":
+          description: not found
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/Error"
+  /book/new:
+    post:
+      security:
+        - Token:
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: one piece
+      responses:
+        "200":
+          description: success create book
+          content:
+            "application/json":
+              schema:
+                type: object
+                properties:
+                  "status":
+                    type: integer
+                    example: 200
+                  "message":
+                    type: string
+                    example: success create book
+                  "data":
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      title:
+                        type: string
+                        example: one piece
+        "400":
+          description: bad request
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/BadRequest"
+components:
+  securitySchemes:
+    Token:
+      type: apiKey
+      in: header
+      name: _token
+      description: authentication token
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: not found
+    BadRequest:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: bad request

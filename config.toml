@@ -1,0 +1,23 @@
+[server]
+mode = "debug"
+port = "8080"
+http_timeout = 60
+cache_expired = 24
+cache_purged = 60
+
+[database]
+db_driver = "mysql"
+db_host = "localhost"
+db_port = "3306"
+db_name = "infra_crud"
+db_username = "fanchann"
+db_password = "root"
+
+[pool]
+conn_idle = 10
+conn_max = 20
+conn_lifetime = 60
+
+[jwt]
+day_expired = 60
+signature_key = "supersecret"
